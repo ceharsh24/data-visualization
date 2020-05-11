@@ -18,24 +18,31 @@
           <option value="youtube">Youtube</option>
         </select>
       </label>
+      <div class="info"></div>
       <div id="social_media" class="social_media"></div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
-      const selectElement = document.querySelector('.ad-platform');
-      selectElement.addEventListener('change', (event) => {
+      const selectDropDown = document.querySelector('.ad-platform');
+      selectDropDown.addEventListener('change', (event) => {
         if (event.target.value) {
+          const addInfo = document.querySelector('.info');
+          event.target.value === 'facebook'
+            ? (addInfo.textContent = `You like ${event.target.value}`)
+            : event.target.value === 'youtube'
+            ? (addInfo.textContent = `You like ${event.target.value}`)
+            : null;
+
           const result = document.querySelector('.social_media');
           d3.select(result).selectAll('*').remove();
           d3.json(`ad-platform/${event.target.value}`, function (json) {
             let margin = { top: 50, right: 50, bottom: 50, left: 50 },
-              width = 1050 - margin.left - margin.right,
-              height = 720 - margin.top - margin.bottom;
+              width = 975 - margin.left - margin.right,
+              height = 610 - margin.top - margin.bottom;
             let svg = d3
               .select(result)
               .append('svg')
-              .attr('width', width + margin.left + margin.right)
-              .attr('height', height + margin.top + margin.bottom)
+              .attr('viewBox', [0, 0, 975, 610])
               .append('g')
               .attr(
                 'transform',
@@ -94,7 +101,7 @@
             let myColor = d3
               .scaleLinear()
               .range(['white', '#003f5c'])
-              .domain([1, 100]);
+              .domain([0, 100]);
 
             let tooltip = d3
               .select('#social_media')
@@ -112,7 +119,7 @@
             };
             let mousemove = function (d) {
               tooltip
-                .html('The exact value of<br>this cell is: ' + d.count)
+                .html('Total users in this segment are: ' + d.count)
                 .style('top', d3.event.pageY - 10 + 'px')
                 .style('left', d3.event.pageX + 10 + 'px');
             };
@@ -134,6 +141,7 @@
                 return y(d.ad_platform_rank);
               })
               .attr('width', function (d) {
+                // return x.bandwidth();
                 return Math.min(
                   x.bandwidth(),
                   Math.max(
@@ -144,6 +152,7 @@
                 );
               })
               .attr('height', function (d) {
+                // return y.bandwidth();
                 return Math.min(
                   y.bandwidth(),
                   Math.max(

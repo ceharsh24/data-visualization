@@ -8,10 +8,8 @@
     {% include "./navbar.html" %}
     <div id="content">
       <div class="container">
-        <!-- <div>Recruitment Application Dashboard</div> -->
         <div class="header">
-          Average Income of Potential Customers who doesn't have Life-Insurance
-          for Each States
+          Average Income of Potential Customers for Each State
         </div>
         <div id="avgIncome"></div>
         <svg id="seq1" width="580" height="40"></svg>
@@ -19,18 +17,17 @@
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
-    <script src="https://d3js.org/d3-scale-chromatic.v1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
     <script>
       let margin = {
-        top: 60,
+        top: 20,
         bottom: 40,
-        left: 70,
-        right: 40,
+        left: 0,
+        right: 20,
       };
 
       let width = 1000 - margin.left - margin.right;
       let height = 700 - margin.top - margin.bottom;
-
       d3.json('../static/json/us-data.json', function (error, us) {
         let projection = d3
           .geoAlbersUsa()
@@ -42,12 +39,7 @@
           .select('#avgIncome')
           .append('svg')
           .attr('id', 'chart')
-          .attr('width', width)
-          .attr('height', height)
-          .attr(
-            'tranform',
-            'translate(0' + margin.left + ',' + margin.top + ')'
-          );
+          .attr('viewBox', [0, 0, 975, 610]);
 
         let myColor = d3
           .scaleLinear()
@@ -111,38 +103,25 @@
             .on('mouseleave', mouseleave);
         });
 
-        var colorA = '#003f5c',
-          colorB = 'white';
+        var linear = d3
+          .scaleLinear()
+          .domain([20000, 140000])
+          .range(['white', '#003f5c']);
+        var legend = d3.select('svg');
 
-        function drawScale(id, interpolator) {
-          var data = Array.from(Array(100).keys());
+        legend
+          .append('g')
+          .attr('class', 'legendLinear')
+          .attr('transform', 'translate(20,20)');
 
-          var cScale = d3
-            .scaleSequential()
-            .interpolator(interpolator)
-            .domain([0, 99]);
+        var legendLinear = d3
+          .legendColor()
+          .shapeWidth(100)
+          .cells([20000, 40000, 60000, 80000, 100000, 120000, 140000])
+          .orient('horizontal')
+          .scale(linear);
 
-          var xScale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
-
-          var u = d3
-            .select('#' + id)
-            .selectAll('rect')
-            .data(data)
-            .enter()
-            .append('rect')
-            .attr('x', (d) => Math.floor(xScale(d)))
-            .attr('y', 0)
-            .attr('height', 40)
-            .attr('width', (d) => {
-              if (d == 99) {
-                return 6;
-              }
-              return Math.floor(xScale(d + 1)) - Math.floor(xScale(d)) + 1;
-            })
-            .attr('fill', (d) => cScale(d));
-        }
-
-        drawScale('seq1', d3.interpolate(colorA, colorB));
+        legend.select('.legendLinear').call(legendLinear);
       });
     </script>
   </body>
