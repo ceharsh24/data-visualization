@@ -7,11 +7,19 @@
   <body>
     {% include "./navbar.html" %}
     <div id="content">
-      <div class="header">Recruitment Application Dashboard</div>
-      <div id="avgIncome"></div>
+      <div class="container">
+        <!-- <div>Recruitment Application Dashboard</div> -->
+        <div class="header">
+          Average Income of Potential Customers who doesn't have Life-Insurance
+          for Each States
+        </div>
+        <div id="avgIncome"></div>
+        <svg id="seq1" width="580" height="40"></svg>
+      </div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.js"></script>
     <script>
       let margin = {
         top: 60,
@@ -26,7 +34,7 @@
       d3.json('../static/json/us-data.json', function (error, us) {
         let projection = d3
           .geoAlbersUsa()
-          .translate([w / 2, h / 2])
+          .translate([width / 2, height / 2])
           .scale([1000]);
         let path = d3.geoPath().projection(projection);
 
@@ -34,8 +42,8 @@
           .select('#avgIncome')
           .append('svg')
           .attr('id', 'chart')
-          .attr('width', w)
-          .attr('height', h)
+          .attr('width', width)
+          .attr('height', height)
           .attr(
             'tranform',
             'translate(0' + margin.left + ',' + margin.top + ')'
@@ -44,7 +52,7 @@
         let myColor = d3
           .scaleLinear()
           .range(['white', '#003f5c'])
-          .domain([1, 100]);
+          .domain([10, 130]);
 
         let tooltip = d3
           .select('#avgIncome')
@@ -102,6 +110,39 @@
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave);
         });
+
+        var colorA = '#003f5c',
+          colorB = 'white';
+
+        function drawScale(id, interpolator) {
+          var data = Array.from(Array(100).keys());
+
+          var cScale = d3
+            .scaleSequential()
+            .interpolator(interpolator)
+            .domain([0, 99]);
+
+          var xScale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
+
+          var u = d3
+            .select('#' + id)
+            .selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('x', (d) => Math.floor(xScale(d)))
+            .attr('y', 0)
+            .attr('height', 40)
+            .attr('width', (d) => {
+              if (d == 99) {
+                return 6;
+              }
+              return Math.floor(xScale(d + 1)) - Math.floor(xScale(d)) + 1;
+            })
+            .attr('fill', (d) => cScale(d));
+        }
+
+        drawScale('seq1', d3.interpolate(colorA, colorB));
       });
     </script>
   </body>
