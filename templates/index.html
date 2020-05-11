@@ -8,27 +8,101 @@
     {% include "./navbar.html" %}
     <div id="content">
       <div class="header">Recruitment Application Dashboard</div>
-      <h2>Max Income</h2>
-      <div id="viz">
-        <ul></ul>
-      </div>
+      <div id="avgIncome"></div>
     </div>
-
-    <!-- Scripts -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script>
-      console.log(d3);
-      // d3.json('/api/avg_income', function (json) {
-      //   console.log(json);
-      //   d3.select('#viz ul')
-      //     .selectAll('li')
-      //     .data(json.data)
-      //     .enter()
-      //     .append('li')
-      //     .text(function (d) {
-      //       return d.gender + ': ' + d.max_income;
-      //     });
-      // });
+      let margin = {
+        top: 60,
+        bottom: 40,
+        left: 70,
+        right: 40,
+      };
+
+      let width = 1000 - margin.left - margin.right;
+      let height = 700 - margin.top - margin.bottom;
+
+      d3.json('../static/json/us-data.json', function (error, us) {
+        let projection = d3
+          .geoAlbersUsa()
+          .translate([w / 2, h / 2])
+          .scale([1000]);
+        let path = d3.geoPath().projection(projection);
+
+        let svg = d3
+          .select('#avgIncome')
+          .append('svg')
+          .attr('id', 'chart')
+          .attr('width', w)
+          .attr('height', h)
+          .attr(
+            'tranform',
+            'translate(0' + margin.left + ',' + margin.top + ')'
+          );
+
+        let myColor = d3
+          .scaleLinear()
+          .range(['white', '#003f5c'])
+          .domain([1, 100]);
+
+        let tooltip = d3
+          .select('#avgIncome')
+          .append('div')
+          .style('opacity', 0)
+          .attr('class', 'tooltip')
+          .style('background-color', 'white')
+          .style('border', 'solid')
+          .style('border-width', '2px')
+          .style('border-radius', '5px')
+          .style('padding', '5px');
+
+        let mouseover = function (d) {
+          tooltip.style('opacity', 1);
+        };
+        let mousemove = function (d) {
+          const avgIncome = d.properties.value * 1000;
+          tooltip
+            .html(`Average income for ${d.properties.name} is $${avgIncome}`)
+            .style('top', d3.event.pageY - 10 + 'px')
+            .style('left', d3.event.pageX + 10 + 'px');
+        };
+        let mouseleave = function (d) {
+          tooltip.style('opacity', 0);
+        };
+
+        d3.json('/averageIncome', function (json) {
+          for (let i = 0; i < json.averageIncome.length; i++) {
+            let dataState = json.averageIncome[i].state;
+            let dataValue = parseFloat(
+              json.averageIncome[i].avg_income
+            ).toFixed(2);
+            for (let n = 0; n < us.features.length; n++) {
+              let jsonState = us.features[n].properties.abbr;
+              if (dataState == jsonState) {
+                us.features[n].properties.value = dataValue;
+                break;
+              }
+            }
+          }
+
+          svg
+            .selectAll('path')
+            .data(us.features)
+            .enter()
+            .append('path')
+            .attr('d', path)
+            .attr('stroke', 'white')
+            .attr('stroke-linejoin', 'round')
+            .style('fill', function (d) {
+              let value = d.properties.value;
+              return myColor(value);
+            })
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseleave', mouseleave);
+        });
+      });
     </script>
   </body>
 </html>
