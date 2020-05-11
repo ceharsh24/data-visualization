@@ -6,10 +6,14 @@
   </head>
   <body>
     {% include "./navbar.html" %}
-    <div class="container">
+    <div id="content">
       <div id="exerciser"></div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="../static/graphs/exerciserBarChart.js"></script>
+    <script>
+      d3.json(`/getInsuranceSegmentData`, function (json) {
+        console.log(json);
+      });
+    </script>
   </body>
 </html>

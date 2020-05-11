@@ -48,7 +48,7 @@ selectDropDown.addEventListener('change', (event) => {
         .append('text')
         .attr(
           'transform',
-          'translate(' + width / 2 + ' ,' + (height + margin.bottom) + ')'
+          'translate(' + width / 2 + ' ,' + (height + margin.bottom - 10) + ')'
         )
         .style('text-anchor', 'middle')
         .text('economy stability');

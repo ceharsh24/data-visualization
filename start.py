@@ -61,6 +61,11 @@ def exerciser():
     return render_template('exerciser.html')
 
 
+@app.route('/insurance_segment')
+def insurance_segment():
+    return render_template('insuranceSegment.html')
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html', title='404'), 404
@@ -121,9 +126,23 @@ def api_get_exerciser():
     result_economy_stability_dict = result_economy_stability.to_dict('records')
 
     result_user = query_db(
-        "select count(id) as numberOfUsers, economic_stability, is_exerciser, avg(income) as avg_income  from customer group by economic_stability, is_exerciser")
+        "Select a.numberOfExerciser, b.numberOfNonExerciser, a.economic_stability, a.avg_income, b.avg_incomeofNonExe from (select count(id) as numberOfExerciser, economic_stability, avg(income) as avg_income from customer where is_exerciser = 1 group by economic_stability) as a join(select count(id) as numberOfNonExerciser, economic_stability, avg(income) as avg_incomeofNonExe from customer where is_exerciser != 1 group by economic_stability) b on (a.economic_stability = b.economic_stability)")
     result_user_to_dict = result_user.to_dict('records')
     return jsonify({'economyStability': result_economy_stability_dict, 'userDetails': result_user_to_dict})
+
+
+@app.route('/getInsuranceSegmentData', methods=['GET'])
+def api_get_insurance_segment():
+    result_insurance_segment = query_db(
+        "select * from insurance_segment")
+    result_insurance_segment_dict = result_insurance_segment.to_dict('result')
+
+    result_insurance_segment2 = query_db(
+        "select insurance_segment_id, race_code, count(id) from customer group by insurance_segment_id, race_code")
+    result_insurance_segment_dict2 = result_insurance_segment2.to_dict(
+        'result')
+
+    return jsonify({'insuranceSegment': result_insurance_segment_dict, 'insuranceSegment2': result_insurance_segment_dict2})
 
 
 if __name__ == '__main__':
