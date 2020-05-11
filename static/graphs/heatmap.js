@@ -10,7 +10,7 @@ selectDropDown.addEventListener('change', (event) => {
 
     const result = document.querySelector('.social_media');
     d3.select(result).selectAll('*').remove();
-    d3.json(`ad-platform/${event.target.value}`, function (json) {
+    d3.json(`adPlatform/${event.target.value}`, function (json) {
       let margin = { top: 50, right: 50, bottom: 50, left: 50 },
         width = 975 - margin.left - margin.right,
         height = 610 - margin.top - margin.bottom;

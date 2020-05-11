@@ -6,14 +6,21 @@
   </head>
   <body>
     {% include "./navbar.html" %}
-    <div id="content">
-      <div id="exerciser"></div>
+    <div class="container">
+      <div class="header">
+        Insurance Segment
+      </div>
+      <label
+        >Please choose an option for comparision:
+        <select class="compare" name="compare">
+          <option value="">Select One …</option>
+          <option value="education">Education</option>
+          <option value="race">Race</option>
+        </select>
+      </label>
+      <div id="insuranceSegment" class="insuranceSegment"></div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script>
-      d3.json(`/getInsuranceSegmentData`, function (json) {
-        console.log(json);
-      });
-    </script>
+    <script src="../static/graphs/insuranceSegment.js"></script>
   </body>
 </html>

@@ -77,18 +77,18 @@ d3.json('../static/json/us-data.json', function (error, us) {
       .on('mouseleave', mouseleave);
   });
 
-  var linear = d3
+  let linear = d3
     .scaleLinear()
     .domain([20000, 140000])
     .range(['white', '#003f5c']);
-  var legend = d3.select('svg');
 
+  let legend = d3.select('svg');
   legend
     .append('g')
     .attr('class', 'legendLinear')
-    .attr('transform', 'translate(20,20)');
+    .attr('transform', 'translate(100,20)');
 
-  var legendLinear = d3
+  let legendLinear = d3
     .legendColor()
     .shapeWidth(100)
     .cells([20000, 40000, 60000, 80000, 100000, 120000, 140000])

@@ -22,3 +22,7 @@ body {
   line-height: 40px;
   padding: 0 auto;
 }
+
+.ad-platform-container {
+  margin: 25px 0px;
+}

@@ -7,6 +7,18 @@
   <body>
     {% include "./navbar.html" %}
     <div class="container">
+      <div class="header">
+        Health Analysis based on User's exercise data and Economy Stability
+        (Economy Stability Rank, Avg Income)
+      </div>
+      <div>
+        This Graph represents the number of users in each economic stability
+        bucket. Orange indicates the number of users who do exercise. Those
+        users in the orange bucket and on the left side should be the prime
+        target. On the other hand, Blue ones are slightly higher premiums as
+        they are riskier. The one the right side of the bucket have lower income
+        and lower stability, so they are at the highest risk for the business.
+      </div>
       <div id="exerciser"></div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>

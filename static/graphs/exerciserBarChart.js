@@ -152,7 +152,7 @@ let initStackedBarChart = {
       .text(function (d) {
         return d === 'numberOfExerciser'
           ? `User who do Exercise`
-          : `User who don't exercise`;
+          : `User who don't Exercise`;
       });
   },
 };

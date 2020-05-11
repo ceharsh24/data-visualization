@@ -8,16 +8,20 @@
     {% include "./navbar.html" %}
     <div class="container">
       <div class="header">
-        Social Media Usage Heatmap for Target-Ad on Youtube/Facebook
+        Social Media Usage Heatmap for Target-Ad on Youtube/Facebook based on
+        Income
       </div>
-      <label
-        >Please choose an ad-platform:
-        <select class="ad-platform" name="ad-platform">
-          <option value="">Select One …</option>
-          <option value="facebook">Facebook</option>
-          <option value="youtube">Youtube</option>
-        </select>
-      </label>
+      <div class="ad-platform-container">
+        <label
+          >Please choose an ad-platform:
+          <select class="ad-platform" name="ad-platform">
+            <option value="">Select One …</option>
+            <option value="facebook">Facebook</option>
+            <option value="youtube">Youtube</option>
+          </select>
+        </label>
+      </div>
+
       <div class="info"></div>
       <div id="social_media" class="social_media"></div>
     </div>
