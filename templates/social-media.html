@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Recruitment Application</title>
+  </head>
+  <body>
+    {% include "./navbar.html" %}
+    <div class="container">
+      <form action="http://localhost:5000/social_media_ad" method="POST">
+        <select class="form-control">
+          <option>Youtube</option>
+          <option>Facebook</option>
+        </select>
+      </form>
+      <div id="social_media"></div>
+    </div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+      d3.json('/api/social_media_ad', function (json) {
+        let margin = { top: 50, right: 50, bottom: 50, left: 50 },
+          width = 1050 - margin.left - margin.right,
+          height = 700 - margin.top - margin.bottom;
+
+        let svg = d3
+          .select('#social_media')
+          .append('svg')
+          .attr('width', width + margin.left + margin.right)
+          .attr('height', height + margin.top + margin.bottom)
+          .append('g')
+          .attr(
+            'transform',
+            'translate(' + margin.left + ',' + margin.top + ')'
+          );
+
+        var economyStability = [
+          '01',
+          '02',
+          '03',
+          '04',
+          '05',
+          '06',
+          '07',
+          '08',
+          '09',
+          '10',
+          '11',
+          '12',
+          '13',
+          '14',
+          '15',
+          '16',
+          '17',
+          '18',
+          '19',
+          '20',
+          '21',
+          '22',
+          '23',
+          '24',
+          '25',
+          '26',
+          '27',
+          '28',
+          '29',
+          '30',
+        ];
+
+        var youtubeRank = [
+          '01',
+          '02',
+          '03',
+          '04',
+          '05',
+          '06',
+          '07',
+          '08',
+          '09',
+          '10',
+          '11',
+          '12',
+          '13',
+          '14',
+          '15',
+          '16',
+          '17',
+          '18',
+          '19',
+          '20',
+        ];
+
+        let x = d3
+          .scaleBand()
+          .range([0, width])
+          .domain(economyStability)
+          .padding(0.15);
+        let xAxis = d3.axisBottom().ticks(economyStability).scale(x);
+        svg
+          .append('g')
+          .attr('transform', 'translate(0,' + height + ')')
+          .attr('x', 265)
+          .attr('y', 240)
+          .style('text-anchor', 'middle')
+          .text('Date')
+          .call(xAxis);
+
+        let y = d3
+          .scaleBand()
+          .range([height, 0])
+          .domain(youtubeRank)
+          .padding(0.15);
+        let yAxis = d3.axisLeft().ticks(youtubeRank).scale(y);
+        svg.append('g').call(yAxis);
+
+        let myColor = d3
+          .scaleLinear()
+          .range(['white', '#003f5c'])
+          .domain([1, 150]);
+
+        let tooltip = d3
+          .select('#social_media')
+          .append('div')
+          .style('opacity', 0)
+          .attr('class', 'tooltip')
+          .style('background-color', 'white')
+          .style('border', 'solid')
+          .style('border-width', '2px')
+          .style('border-radius', '5px')
+          .style('padding', '5px');
+
+        let mouseover = function (d) {
+          tooltip.style('opacity', 1);
+        };
+        let mousemove = function (d) {
+          tooltip
+            .html('The exact value of<br>this cell is: ' + d.count)
+            .style('top', d3.event.pageY - 10 + 'px')
+            .style('left', d3.event.pageX + 10 + 'px');
+        };
+        let mouseleave = function (d) {
+          tooltip.style('opacity', 0);
+        };
+
+        svg
+          .selectAll()
+          .data(json.income, function (d) {
+            return d.economic_stability + ':' + d.youtube_user_rank;
+          })
+          .enter()
+          .append('rect')
+          .attr('x', function (d) {
+            return x(d.economic_stability);
+          })
+          .attr('y', function (d) {
+            return y(d.youtube_user_rank);
+          })
+          .attr('width', function (d) {
+            return Math.min(
+              x.bandwidth(),
+              Math.max(
+                5,
+                (d.count * x.bandwidth()) /
+                  (json.minAndMaxCount.max - json.minAndMaxCount.min * 10)
+              )
+            );
+          })
+          .attr('height', function (d) {
+            return Math.min(
+              y.bandwidth(),
+              Math.max(
+                5,
+                (d.count * y.bandwidth()) /
+                  (json.minAndMaxCount.max - json.minAndMaxCount.min * 10)
+              )
+            );
+          })
+          .style('fill', function (d) {
+            return myColor(d.income);
+          })
+          .on('mouseover', mouseover)
+          .on('mousemove', mousemove)
+          .on('mouseleave', mouseleave);
+      });
+    </script>
+  </body>
+</html>
