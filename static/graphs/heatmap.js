@@ -71,6 +71,7 @@ selectDropDown.addEventListener('change', (event) => {
         .append('div')
         .style('opacity', 0)
         .attr('class', 'tooltip')
+        .attr('data-html', 'true')
         .style('background-color', 'white')
         .style('border', 'solid')
         .style('border-width', '2px')
@@ -82,7 +83,11 @@ selectDropDown.addEventListener('change', (event) => {
       };
       let mousemove = function (d) {
         tooltip
-          .html('Total users in this segment are: ' + d.count)
+          .html(
+            `Total users in this segment are: ${
+              d.count
+            } <br /> Avg. Income is $${d.income.toFixed(2) * 1000}`
+          )
           .style('top', d3.event.pageY - 10 + 'px')
           .style('left', d3.event.pageX + 10 + 'px');
       };
