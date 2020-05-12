@@ -7,7 +7,7 @@ selectDropDown.addEventListener('change', (event) => {
         (stackKey = config.key),
         (data = config.data),
         (margin = { top: 50, right: 50, bottom: 50, left: 50 }),
-        (width = 975 - margin.left - margin.right),
+        (width = 875 - margin.left - margin.right),
         (height = 610 - margin.top - margin.bottom),
         (xScale = d3.scaleBand().range([0, width]).padding(0.1)),
         (yScale = d3.scaleLinear().range([height, 0])),
@@ -156,6 +156,7 @@ selectDropDown.addEventListener('change', (event) => {
   if (event.target.value === 'race') {
     d3.json(`/insuranceSegment/race`, function (json) {
       let formattedData = [];
+      let key = [];
       json.insuranceSegment.map((eachInsuranceSegment) => {
         let temp = {};
         const filterUser = json.insuranceSegmentCustomerDetails.filter(
@@ -163,44 +164,36 @@ selectDropDown.addEventListener('change', (event) => {
             eachUser.insurance_segment_id === eachInsuranceSegment.id
         );
         temp.insuranceSegment = eachInsuranceSegment.value;
+        json.raceDetails.forEach((eachRace) => (temp[eachRace.value] = 0));
         filterUser.forEach((eachRace) => {
           const raceValue = json.raceDetails.find(
             (race) => race.code === eachRace.race_code
           );
-          temp[raceValue.value] = eachRace['count(id)'];
+          temp[raceValue.value] = eachRace['count(id)'] || 0;
         });
         formattedData.push(temp);
       });
+      json.raceDetails.forEach((eachRace) => key.push(eachRace.value));
 
-      var key = [
-        'American Indian',
-        'Asian',
-        'Black',
-        'Chinese',
-        'Hispanic',
-        'Japanese',
-        'Other',
-        'White',
-      ];
       initStackedBarChart.draw({
         data: formattedData,
         key: key,
         element: 'stacked-bar',
         color: [
-          '#ffa600',
-          '#ff7c43',
-          '#f95d6a',
-          '#d45087',
-          '#a05195',
-          '#665191',
-          '#2f4b7c',
-          '#003f5c',
+          '#45478f',
+          '#7c6ba8',
+          '#ab92c3',
+          '#d7bde0',
+          '#ffebff',
+          '#f6c2e2',
+          '#f097bb',
+          '#e66b89',
+          '#de425b',
         ],
       });
     });
   } else {
     d3.json(`/insuranceSegment/education`, function (json) {
-      console.log(json);
       let formattedData = [];
       json.insuranceSegment.map((eachInsuranceSegment) => {
         let temp = {};

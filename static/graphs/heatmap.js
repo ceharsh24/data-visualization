@@ -1,13 +1,6 @@
 const selectDropDown = document.querySelector('.ad-platform');
 selectDropDown.addEventListener('change', (event) => {
   if (event.target.value) {
-    const addInfo = document.querySelector('.info');
-    event.target.value === 'facebook'
-      ? (addInfo.textContent = `You like ${event.target.value}`)
-      : event.target.value === 'youtube'
-      ? (addInfo.textContent = `You like ${event.target.value}`)
-      : null;
-
     const result = document.querySelector('.social_media');
     d3.select(result).selectAll('*').remove();
     d3.json(`adPlatform/${event.target.value}`, function (json) {
