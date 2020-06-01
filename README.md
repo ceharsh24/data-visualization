@@ -1,7 +1,3 @@
-# MassMutual Data Viz Recruitment
-
-This project is intended to evaluate MassMutual data visualization engineering candidates. The project contains a simple web app to be use as a starting point to build data visualizations.
-
 ## Instructions
 
 Your goal, as a data visualization engineering candidate, is to build data visualizations for a marketing manager. These visualizations should enable this user to locate and understand potential new markets or customers for the purpose of selling life insurance.
@@ -37,9 +33,6 @@ Then set up the new virtual environment with the required dependencies:
 Start the web application:
 `python start.py`
 
-## Data
-
-This project contains an SQLite database, **recruit.db**. This database is pre-populated with data and should be utilized to produce data visualizations.
 
 ### Data Dictionary
 
@@ -58,14 +51,7 @@ This project contains an SQLite database, **recruit.db**. This database is pre-p
 - sports_leisure_spending - Amount spent by customer on Sports & Leisure
 - economic_stability - 01 = Most Likely Economically Stable, 30 = Least Likely Economically Stable
 - insurance_segment_id - foreign key to insurance_segment table
-- youtube_user_rank - Propensity to use YouTube, 01 (Most Likely) through 20 (Least Likely)
+- 
+ube_user_rank - Propensity to use YouTube, 01 (Most Likely) through 20 (Least Likely)
 - facebook_user_rank - Propensity to use Facebook, 01 (Most Likely) through 20 (Least Likely)
 - gender - M = Male, F = Female
-
-## Next Steps
-
-1. Respond to the exercise email with the completed exercise. You can either link to the completed exercise or attach the compressed project to the email.
-2. The completed exercise will be reviewed by the team.
-3. If the team decides to move forward, a recruiter will contact you to schedule the final interview.
-4. During the final interview you will meet the whole team and present your work. First you will present your running project and describe your design decisions. Then you will walk us through your code and describe your implementation decisions.
-5. There will be time at the end of the interview to ask general questions.
