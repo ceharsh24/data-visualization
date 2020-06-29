@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here (you might not want node)
-      - image: circleci/python:lts
+      - image: circleci/node:lts
     steps:
       - checkout
       - run: ssh -t -oStrictHostKeyChecking=no -v $DROPLET_USER@$DROPLET_IP "bash ./scripts/deploy-data-viz-prod.sh"
